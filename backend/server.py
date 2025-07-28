@@ -68,6 +68,16 @@ class RobotCommand(BaseModel):
     command: str  # start, stop, pause, resume
     mode: Optional[str] = "full_clean"  # full_clean, mop_only, spray_only, uv_only
 
+class RobotStatusUpdate(BaseModel):
+    robot_id: str
+    status: str
+    progress: int
+    is_cleaning: bool
+    obstacle_detected: bool
+    current_mode: Optional[str] = None
+    uptime: Optional[int] = None
+    sensors: Optional[Dict] = None
+
 # WebSocket manager
 class ConnectionManager:
     def __init__(self):
