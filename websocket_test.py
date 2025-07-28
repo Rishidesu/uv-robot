@@ -27,7 +27,7 @@ class WebSocketTester:
         """Test basic WebSocket connection"""
         print("\n🔌 Testing WebSocket Connection...")
         try:
-            async with websockets.connect(self.ws_url, timeout=10) as websocket:
+            async with websockets.connect(self.ws_url) as websocket:
                 print(f"   Connected to: {self.ws_url}")
                 
                 # Wait for initial message
@@ -56,7 +56,7 @@ class WebSocketTester:
         print("\n📊 Testing Real-time Updates...")
         
         try:
-            async with websockets.connect(self.ws_url, timeout=10) as websocket:
+            async with websockets.connect(self.ws_url) as websocket:
                 # Skip initial message
                 await websocket.recv()
                 
@@ -136,7 +136,7 @@ class WebSocketTester:
         print("\n🚧 Testing Obstacle Detection...")
         
         try:
-            async with websockets.connect(self.ws_url, timeout=10) as websocket:
+            async with websockets.connect(self.ws_url) as websocket:
                 # Skip initial message
                 await websocket.recv()
                 
@@ -150,12 +150,12 @@ class WebSocketTester:
                     return False
                 
                 # Listen for obstacle detection (may take up to 50 seconds with 10% chance every 5 seconds)
-                print("   Listening for obstacle detection (up to 60 seconds)...")
+                print("   Listening for obstacle detection (up to 30 seconds)...")
                 start_time = time.time()
                 obstacle_detected = False
                 auto_resumed = False
                 
-                while time.time() - start_time < 60:
+                while time.time() - start_time < 30:
                     try:
                         message = await asyncio.wait_for(websocket.recv(), timeout=2)
                         data = json.loads(message)
@@ -188,7 +188,7 @@ class WebSocketTester:
                     self.log_test("Obstacle Detection", True, "- Obstacle detected (auto-resume not captured)")
                     return True
                 else:
-                    self.log_test("Obstacle Detection", False, "- No obstacle detected in 60 seconds (random chance)")
+                    self.log_test("Obstacle Detection", False, "- No obstacle detected in 30 seconds (random chance)")
                     return False
                     
         except Exception as e:
@@ -201,8 +201,8 @@ class WebSocketTester:
         
         try:
             # Connect two clients
-            async with websockets.connect(self.ws_url, timeout=10) as ws1, \
-                       websockets.connect(self.ws_url, timeout=10) as ws2:
+            async with websockets.connect(self.ws_url) as ws1, \
+                       websockets.connect(self.ws_url) as ws2:
                 
                 print("   Two clients connected")
                 
